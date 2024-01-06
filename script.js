@@ -42,62 +42,60 @@ const numbersDiv = d.querySelector('.numbers')
 numbersDiv.setAttribute('style', 'display: grid; grid-template-columns: repeat(6, 1fr); grid-gap: 5px; margin-left: 10em; margin-right: 10em;')
 
 
-
+    let inputValue
 textInput.addEventListener('blur', (e) => {
-    const inputValue = e.target.value;
+    inputValue = e.target.value;
     if(isNaN(inputValue)){
         errorP.textContent = 'Only numbers!'
         inputDiv.appendChild(errorP)
-    } else if (inputValue === "") {
+        return
+    }
+    if (inputValue === "") {
         errorP.textContent = 'Please enter a number.'
         inputDiv.appendChild(errorP)
-    } else {
-        while (inputDiv.lastChild === errorP) {
-            inputDiv.removeChild(errorP)
-        }
+        return
+    } 
+    while (inputDiv.lastChild === errorP) {
+        inputDiv.removeChild(errorP)
     }
+    parseInt(inputValue)
 })
 
-
-let x
-generateButton.addEventListener('click', () => {
-    x = parseInt(textInput.value)
-    while(numbersDiv.firstChild){
-        numbersDiv.removeChild(numbersDiv.firstChild)
-    }
-    for (let i = 0; i <= x; i++) {
-        const numbers = d.createElement('h1')
-        numbers.className = 'numbers'
-        numbers.textContent = i
-        numbers.setAttribute('style', 'text-align: center; color: white; font-weight: normal; padding: 0.5em; box-sizing: border-box;')
-
-        const primes = new Array(x+1).fill(true)
+let result = []
+for (let i = 0; i <= inputValue; i++) {
+    const primes = new Array(inputValue+1).fill(true)
         primes[0] = primes[1] = false
 
-        for (let i = 2; i <= Math.sqrt(x); i++) {
+        for (let i = 2; i <= Math.sqrt(inputValue); i++) {
             if(primes[i]) {
-                for (let j = i * i; j <= x; j += i) {
+                for (let j = i * i; j <= inputValue; j += i) {
                     primes[j] = false
                 }
             }
         }
 
-        const result = []
-        for (let i = 2; i <= x; i++) {
+        
+        for (let i = 2; i <= inputValue; i++) {
             if(primes[i]) result.push(i)
         }
+}
 
-        if (i % 2 === 0) {
-            numbers.style.backgroundColor = '#2DBF73'
-        } else if (i % 2 != 0) {
-            numbers.style.backgroundColor = '#FDDB3A'
+generateButton.addEventListener('click', () => {
+    console.log(inputValue)
+    while(numbersDiv.firstChild){
+        numbersDiv.removeChild(numbersDiv.firstChild)
+    }
+    for (let i = 0; i <= inputValue; i++) {
+        const numbers = d.createElement('h1')
+        numbers.className = 'numbers'
+        numbers.textContent = i
+        numbers.setAttribute('style', 'text-align: center; color: white; font-weight: normal; padding: 0.5em; box-sizing: border-box;')
+
+        numbers.style.background = i % 2 === 0 ? '#2DBF73' : '#FDDB3A'
+
+        if (result.includes(i)){
+            numbers.style.backgroundColor = '#FA5E53'
         }
-
-        result.forEach(element => {
-            if (i === element) {
-                numbers.style.backgroundColor = '#FA5E53'
-            }
-        });
 
         numbersDiv.appendChild(numbers)
     }
