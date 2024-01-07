@@ -48,13 +48,14 @@ textInput.addEventListener('blur', (e) => {
     if(isNaN(inputValue)){
         errorP.textContent = 'Only numbers!'
         inputDiv.appendChild(errorP)
-    } else if (inputValue === "") {
+        return
+    } if (inputValue === "") {
         errorP.textContent = 'Please enter a number.'
         inputDiv.appendChild(errorP)
-    } else {
-        while (inputDiv.lastChild === errorP) {
-            inputDiv.removeChild(errorP)
-        }
+        return
+    }
+    while (inputDiv.lastChild === errorP) {
+        inputDiv.removeChild(errorP)
     }
 })
 
@@ -82,22 +83,13 @@ generateButton.addEventListener('click', () => {
             }
         }
 
-        const result = []
-        for (let i = 2; i <= x; i++) {
-            if(primes[i]) result.push(i)
-        }
+        const result = primes.map((x,i) => x ? [i] : []).flat()
 
-        if (i % 2 === 0) {
-            numbers.style.backgroundColor = '#2DBF73'
-        } else if (i % 2 != 0) {
-            numbers.style.backgroundColor = '#FDDB3A'
-        }
+        numbers.style.backgroundColor = i % 2 === 0 ? '#2DBF73' : '#FDDB3A' 
 
-        result.forEach(element => {
-            if (i === element) {
-                numbers.style.backgroundColor = '#FA5E53'
-            }
-        });
+        if (result.includes(i)) {
+            numbers.style.backgroundColor = '#FA5E53'
+        }
 
         numbersDiv.appendChild(numbers)
     }
