@@ -63,6 +63,19 @@ textInput.addEventListener('blur', (e) => {
 let x
 generateButton.addEventListener('click', () => {
     x = parseInt(textInput.value)
+    const primes = new Array(x+1).fill(true)
+    primes[0] = primes[1] = false
+
+    for (let i = 2; i <= Math.sqrt(x); i++) {
+        if(primes[i]) {
+            for (let j = i * i; j <= x; j += i) {
+                primes[j] = false
+            }
+        }
+    }
+
+    const result = primes.map((x,i) => x ? [i] : []).flat()
+
     while(numbersDiv.firstChild){
         numbersDiv.removeChild(numbersDiv.firstChild)
     }
@@ -71,19 +84,6 @@ generateButton.addEventListener('click', () => {
         numbers.className = 'numbers'
         numbers.textContent = i
         numbers.setAttribute('style', 'text-align: center; color: white; font-weight: normal; padding: 0.5em; box-sizing: border-box;')
-
-        const primes = new Array(x+1).fill(true)
-        primes[0] = primes[1] = false
-
-        for (let i = 2; i <= Math.sqrt(x); i++) {
-            if(primes[i]) {
-                for (let j = i * i; j <= x; j += i) {
-                    primes[j] = false
-                }
-            }
-        }
-
-        const result = primes.map((x,i) => x ? [i] : []).flat()
 
         numbers.style.backgroundColor = i % 2 === 0 ? '#2DBF73' : '#FDDB3A' 
 
